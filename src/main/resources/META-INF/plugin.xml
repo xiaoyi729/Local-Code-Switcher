@@ -1,0 +1,87 @@
+<idea-plugin>
+    <id>com.zxy.plugin.idea-qoder-switcher</id>
+    <name>IDEA Qoder Switcher</name>
+    <vendor>zxy</vendor>
+    <description><![CDATA[
+    <h3>IDEA 与 Qoder IDE 跨目录同步插件</h3>
+    <p>实现 IntelliJ IDEA 和 Qoder IDE 之间的代码同步，完美支持双开同一项目的不同本地克隆。</p>
+    
+    <h4>主要功能：</h4>
+    <ul>
+        <li>🔄 跨目录扫描：比对 Qoder 与 IDEA 项目差异</li>
+        <li>📝 交互式同步：双击文件即可进行局部或全部合并</li>
+        <li>🔍 智能 Diff：集成 IDEA 内置差异对比工具</li>
+        <li>⚡ 极简流程：手动触发，精准把控代码质量</li>
+    </ul>
+    ]]></description>
+
+    <url>https://github.com/xiaoyi729/IDEA-Qoder-Switcher</url>
+
+    <depends>com.intellij.modules.platform</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- 设置配置界面 -->
+        <applicationConfigurable 
+            parentId="tools" 
+            instance="com.zxy.plugin.qoder.settings.QoderSettingsConfigurable"
+            id="com.zxy.plugin.qoder.settings.QoderSettingsConfigurable"
+            displayName="Qoder IDE Switcher"/>
+        
+        <!-- 服务注册 -->
+        <applicationService serviceImplementation="com.zxy.plugin.qoder.services.QoderSettingsState"/>
+        <projectService serviceImplementation="com.zxy.plugin.qoder.services.QoderProjectService"/>
+        <projectService serviceImplementation="com.zxy.plugin.qoder.services.QoderDirectorySyncService"/>
+    </extensions>
+
+    <actions>
+        <!-- 主工具栏切换按钮 -->
+        <action id="com.zxy.plugin.qoder.actions.SwitchToQoderAction"
+                class="com.zxy.plugin.qoder.actions.SwitchToQoderAction"
+                text="在 Qoder 中继续"
+                description="快速切换到 Qoder IDE 窗口"
+                icon="AllIcons.Actions.Execute">
+            <add-to-group group-id="ToolbarRunGroup" anchor="after" relative-to-action="RunConfiguration"/>
+        </action>
+
+        <!-- 编辑器右键菜单 -->
+        <action id="com.zxy.plugin.qoder.actions.OpenFileInQoderAction"
+                class="com.zxy.plugin.qoder.actions.OpenFileInQoderAction"
+                text="在 Qoder 中打开"
+                description="将当前文件在 Qoder IDE 中打开"
+                icon="AllIcons.Actions.MenuOpen">
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+        </action>
+
+        <!-- 项目视图右键菜单 -->
+        <action id="com.zxy.plugin.qoder.actions.OpenProjectInQoderAction"
+                class="com.zxy.plugin.qoder.actions.OpenProjectInQoderAction"
+                text="在 Qoder 中打开项目/目录"
+                description="在 Qoder IDE 中打开选中的文件或文件夹"
+                icon="AllIcons.Actions.MenuOpen">
+            <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>
+        </action>
+        
+        <!-- 工具栏菜单组 -->
+        <group id="QoderSwitcherActionGroup" text="Qoder IDE 同步" popup="true">
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+            
+            <action id="com.zxy.plugin.qoder.actions.ManualSyncQoderChangesAction"
+                    class="com.zxy.plugin.qoder.actions.ManualSyncQoderChangesAction"
+                    text="同步 Qoder 变更"
+                    description="手动扫描 Qoder 目录并审查变更"
+                    icon="AllIcons.Actions.Refresh">
+                <keyboard-shortcut keymap="$default" first-keystroke="control alt S"/>
+            </action>
+            
+            <separator/>
+            
+            <action id="com.zxy.plugin.qoder.actions.OpenFileInQoderActionGroup"
+                    class="com.zxy.plugin.qoder.actions.OpenFileInQoderAction"
+                    text="在 Qoder 中打开当前文件"/>
+                    
+            <action id="com.zxy.plugin.qoder.actions.OpenProjectInQoderActionGroup"
+                    class="com.zxy.plugin.qoder.actions.OpenProjectInQoderAction"
+                    text="在 Qoder 中打开项目"/>
+        </group>
+    </actions>
+</idea-plugin>
