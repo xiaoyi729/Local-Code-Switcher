@@ -1,32 +1,31 @@
 <idea-plugin>
-    <id>com.zxy.plugin.idea-qoder-switcher</id>
-    <name>IDEA Qoder Switcher</name>
+    <id>com.zxy.plugin.local-code-switcher</id>
+    <name>Local Code Switcher</name>
     <vendor>zxy</vendor>
     <description><![CDATA[
-    <h3>IDEA 与 Qoder IDE 跨目录同步插件</h3>
-    <p>实现 IntelliJ IDEA 和 Qoder IDE 之间的代码同步，完美支持双开同一项目的不同本地克隆。</p>
-    
-    <h4>主要功能：</h4>
+    Cross-directory synchronization plugin for IntelliJ IDEA and Qoder IDE. Enables seamless code sync between different local clones of the same project.
+
+    <h4>Main Features:</h4>
     <ul>
-        <li>🔄 跨目录扫描：比对 Qoder 与 IDEA 项目差异</li>
-        <li>📝 交互式同步：双击文件即可进行局部或全部合并</li>
-        <li>🔍 智能 Diff：集成 IDEA 内置差异对比工具</li>
-        <li>⚡ 极简流程：手动触发，精准把控代码质量</li>
+        <li>🔄 Cross-directory scanning: Compare differences between Qoder and IDEA projects</li>
+        <li>📝 Interactive sync: Double-click a file to merge parts or all changes</li>
+        <li>🔍 Smart Diff: Integrated with IDEA's built-in diff tool</li>
+        <li>⚡ Minimalist workflow: Manually triggered, precise control over code quality</li>
     </ul>
     ]]></description>
 
-    <url>https://github.com/xiaoyi729/IDEA-Qoder-Switcher</url>
+    <url>https://github.com/xiaoyi729/Local-Code-Switcher</url>
 
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- 设置配置界面 -->
-        <applicationConfigurable 
-            parentId="tools" 
+        <applicationConfigurable
+            parentId="tools"
             instance="com.zxy.plugin.qoder.settings.QoderSettingsConfigurable"
             id="com.zxy.plugin.qoder.settings.QoderSettingsConfigurable"
             displayName="Qoder IDE Switcher"/>
-        
+
         <!-- 服务注册 -->
         <applicationService serviceImplementation="com.zxy.plugin.qoder.services.QoderSettingsState"/>
         <projectService serviceImplementation="com.zxy.plugin.qoder.services.QoderProjectService"/>
@@ -60,11 +59,11 @@
                 icon="AllIcons.Actions.MenuOpen">
             <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>
         </action>
-        
+
         <!-- 工具栏菜单组 -->
         <group id="QoderSwitcherActionGroup" text="Qoder IDE 同步" popup="true">
             <add-to-group group-id="ToolsMenu" anchor="last"/>
-            
+
             <action id="com.zxy.plugin.qoder.actions.ManualSyncQoderChangesAction"
                     class="com.zxy.plugin.qoder.actions.ManualSyncQoderChangesAction"
                     text="同步 Qoder 变更"
@@ -72,13 +71,13 @@
                     icon="AllIcons.Actions.Refresh">
                 <keyboard-shortcut keymap="$default" first-keystroke="control alt S"/>
             </action>
-            
+
             <separator/>
-            
+
             <action id="com.zxy.plugin.qoder.actions.OpenFileInQoderActionGroup"
                     class="com.zxy.plugin.qoder.actions.OpenFileInQoderAction"
                     text="在 Qoder 中打开当前文件"/>
-                    
+
             <action id="com.zxy.plugin.qoder.actions.OpenProjectInQoderActionGroup"
                     class="com.zxy.plugin.qoder.actions.OpenProjectInQoderAction"
                     text="在 Qoder 中打开项目"/>

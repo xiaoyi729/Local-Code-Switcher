@@ -1,6 +1,6 @@
-# IDEA Qoder Switcher Plugin
+# Local Code Switcher Plugin
 
-一个 IntelliJ IDEA 插件，实现 IDEA 和 Qoder IDE 之间的无缝切换和代码同步功能。
+一个 IntelliJ IDEA 插件，实现 IDEA 和 Qoder IDE（或其他本地 IDE）之间的无缝切换和代码同步功能。
 
 ## 功能特性
 
@@ -30,7 +30,7 @@
 
 1. **构建插件**
 ```bash
-cd idea-qoder-plugin
+cd local-code-switcher
 ./gradlew buildPlugin
 ```
 
@@ -38,7 +38,7 @@ cd idea-qoder-plugin
    - 打开 IDEA
    - 进入 `File → Settings → Plugins`
    - 点击齿轮图标 → `Install Plugin from Disk...`
-   - 选择 `build/distributions/idea-qoder-switcher-1.0.0.zip`
+   - 选择 `build/distributions/local-code-switcher-1.0.0.zip`
 
 ### 方式二：从源码运行（开发模式）
 
@@ -131,7 +131,7 @@ cd idea-qoder-plugin
 1. **克隆代码**
 ```bash
 git clone <repository-url>
-cd idea-qoder-plugin
+cd local-code-switcher
 ```
 
 2. **导入项目**
@@ -155,7 +155,7 @@ cd idea-qoder-plugin
 ### 项目结构
 
 ```
-idea-qoder-plugin/
+local-code-switcher/
 ├── src/main/
 │   ├── kotlin/com/zxy/plugin/qoder/
 │   │   ├── actions/          # 用户操作

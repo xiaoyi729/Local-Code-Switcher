@@ -39,6 +39,10 @@ tasks {
         untilBuild.set("241.*")
     }
 
+    buildPlugin {
+        archiveBaseName.set("local-code-switcher")
+    }
+
     signPlugin {
         certificateChain.set(System.getenv("CERTIFICATE_CHAIN"))
         privateKey.set(System.getenv("PRIVATE_KEY"))

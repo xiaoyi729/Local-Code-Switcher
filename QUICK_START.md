@@ -1,4 +1,4 @@
-# IDEA Qoder Switcher Plugin - 快速使用指南
+# Local Code Switcher Plugin - 快速使用指南
 
 ## 快速开始
 
@@ -24,7 +24,7 @@ gradlew.bat buildPlugin
 ./gradlew buildPlugin
 ```
 
-构建完成后，插件文件位于：`build/distributions/idea-qoder-switcher-1.0.0.zip`
+构建完成后，插件文件位于：`build/distributions/local-code-switcher-1.0.0.zip`
 
 ### 3. 安装到 IDEA
 
@@ -32,7 +32,7 @@ gradlew.bat buildPlugin
 2. 进入 `File → Settings → Plugins` (Windows/Linux) 或 `IntelliJ IDEA → Preferences → Plugins` (macOS)
 3. 点击齿轮图标 ⚙️
 4. 选择 `Install Plugin from Disk...`
-5. 选择 `build/distributions/idea-qoder-switcher-1.0.0.zip`
+5. 选择 `build/distributions/local-code-switcher-1.0.0.zip`
 6. 重启 IDEA
 
 ### 4. 配置插件

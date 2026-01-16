@@ -1,11 +1,11 @@
-# IDEA Qoder Switcher Plugin - 项目总结
+# Local Code Switcher Plugin - 项目总结
 
 ## 项目概览
 
 这是一个完整的 IntelliJ IDEA 插件项目，实现了 IDEA 与 Qoder IDE 之间的无缝切换和代码同步功能。
 
 ### 项目信息
-- **项目名称**: IDEA Qoder Switcher
+- **项目名称**: Local Code Switcher
 - **版本**: 1.0.0
 - **语言**: Kotlin
 - **构建工具**: Gradle + IntelliJ Plugin
@@ -14,7 +14,7 @@
 ## 项目结构
 
 ```
-idea-qoder-plugin/
+local-code-switcher/
 ├── src/main/
 │   ├── kotlin/com/zxy/plugin/qoder/
 │   │   ├── actions/                          # 用户交互动作
@@ -239,7 +239,7 @@ idea-qoder-plugin/
 # 构建插件
 ./gradlew buildPlugin
 
-# 输出: build/distributions/idea-qoder-switcher-1.0.0.zip
+# 输出: build/distributions/local-code-switcher-1.0.0.zip
 ```
 
 ### 安装使用
