@@ -113,7 +113,10 @@ class ChangeReviewDialog(
             override fun mouseClicked(e: java.awt.event.MouseEvent) {
                 if (e.clickCount == 2 && table.selectedRow >= 0) {
                     val selectedIndex = table.selectedRow
-                    showDiffAndInteractiveSync(changes[selectedIndex])
+                    // 修复: 通过表格中的文件路径找到对应的 FileChange 对象
+                    val relativePath = tableModel.getValueAt(selectedIndex, 1) as? String ?: return
+                    val change = changes.find { it.relativePath == relativePath } ?: return
+                    showDiffAndInteractiveSync(change)
                 }
             }
         })
