@@ -190,6 +190,11 @@ local-code-switcher/
 
 ## 更新日志
 
+### Version 1.0.1 (2026-01-26)
+- ✨ 统一 UI 名称为 "Local Code Switcher"
+- ✅ 完善中英双语说明文档
+- ✅ 清理所有旧品牌标识内容
+
 ### Version 1.0.0 (2026-01-16)
 - ✨ 初始版本发布
 - ✅ 支持 IDEA 到 Qoder IDE 的切换

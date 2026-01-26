@@ -31,6 +31,14 @@
     ]]></description>
 
     <url>https://github.com/xiaoyi729/Local-Code-Switcher</url>
+    <version>1.0.1</version>
+    <change-notes><![CDATA[
+      <ul>
+        <li>Unified UI name to "Local Code Switcher" / 统一 UI 名称为 "Local Code Switcher"</li>
+        <li>Improved English and Chinese documentation / 完善中英双语说明文档</li>
+        <li>Cleaned up all legacy branding references / 清理所有旧品牌标识内容</li>
+      </ul>
+    ]]></change-notes>
 
     <depends>com.intellij.modules.platform</depends>
 
