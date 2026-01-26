@@ -52,7 +52,7 @@ cd local-code-switcher
 
 首次使用需要配置 Qoder IDE 的安装路径：
 
-1. 打开 `File → Settings → Tools → Qoder IDE Switcher`
+1. 打开 `File → Settings → Tools → Local Code Switcher`
 2. 设置 Qoder IDE 路径：
    - **Windows**: `C:\Program Files\Qoder\qoder.exe`
    - **macOS**: `/Applications/Qoder.app`

@@ -21,7 +21,7 @@ class QoderSettingsConfigurable : Configurable {
     private val qoderProjectPathField = TextFieldWithBrowseButton()
     private val keepWindowCheckBox = JBCheckBox("打开 Qoder IDE 时保持 IDEA 窗口")
     
-    override fun getDisplayName(): String = "Qoder IDE Switcher"
+    override fun getDisplayName(): String = "Local Code Switcher"
     
     override fun createComponent(): JComponent {
         val settings = QoderSettingsState.getInstance()

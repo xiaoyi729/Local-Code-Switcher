@@ -218,7 +218,7 @@ local-code-switcher/
 ```
 1. 安装插件后重启 IDEA
    ↓
-2. File → Settings → Tools → Qoder IDE Switcher
+2. File → Settings → Tools → Local Code Switcher
    ↓
 3. 配置 Qoder IDE 路径
    ↓

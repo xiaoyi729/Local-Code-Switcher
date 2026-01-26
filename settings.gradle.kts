@@ -1,1 +1,1 @@
-rootProject.name = "idea-qoder-switcher"
+rootProject.name = "local-code-switcher"

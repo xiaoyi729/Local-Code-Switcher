@@ -23,7 +23,7 @@ class OpenFileInQoderAction : AnAction() {
         if (settings.qoderIdePath.isEmpty()) {
             Messages.showErrorDialog(
                 project,
-                "请先在设置中配置 Qoder IDE 路径\n路径: File → Settings → Tools → Qoder IDE Switcher",
+                "请先在设置中配置 Qoder IDE 路径\n路径: File → Settings → Tools → Local Code Switcher",
                 "Qoder IDE 路径未配置"
             )
             return
