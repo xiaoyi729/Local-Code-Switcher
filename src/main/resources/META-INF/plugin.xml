@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.zxy.plugin.local-code-switcher</id>
     <name>Local Code Switcher</name>
-    <vendor>zxy</vendor>
+    <vendor url="https://github.com/xiaoyi729/Local-Code-Switcher">zxy</vendor>
     <description><![CDATA[
     Cross-directory synchronization plugin for IntelliJ IDEA and Qoder IDE. Enables seamless code sync between different local clones of the same project.
     <br/><br/>
@@ -30,7 +30,6 @@
     </ol>
     ]]></description>
 
-    <url>https://github.com/xiaoyi729/Local-Code-Switcher</url>
     <version>1.0.0</version>
     <change-notes><![CDATA[
       <ul>
