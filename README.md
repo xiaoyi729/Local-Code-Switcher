@@ -190,7 +190,7 @@ local-code-switcher/
 
 ## 更新日志
 
-### Version 1.0.1 (2026-01-26)
+### Version 1.0.0 (2026-01-27)
 - ✨ 统一 UI 名称为 "Local Code Switcher"
 - ✅ 完善中英双语说明文档
 

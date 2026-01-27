@@ -31,7 +31,7 @@
     ]]></description>
 
     <url>https://github.com/xiaoyi729/Local-Code-Switcher</url>
-    <version>1.0.1</version>
+    <version>1.0.0</version>
     <change-notes><![CDATA[
       <ul>
         <li>Unified UI name to "Local Code Switcher" / 统一 UI 名称为 "Local Code Switcher"</li>
