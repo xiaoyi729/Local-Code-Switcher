@@ -5,11 +5,9 @@ import com.intellij.diff.DiffManager
 import com.intellij.diff.requests.SimpleDiffRequest
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.DialogWrapper
-import com.intellij.ui.components.JBList
 import com.intellij.ui.components.JBScrollPane
 import com.intellij.ui.table.JBTable
 import com.intellij.openapi.application.ApplicationManager
-import com.intellij.openapi.fileEditor.FileDocumentManager
 import com.intellij.openapi.fileTypes.FileTypeManager
 import com.intellij.openapi.vfs.LocalFileSystem
 import com.intellij.ui.DoubleClickListener
@@ -17,15 +15,14 @@ import java.awt.BorderLayout
 import java.awt.Dimension
 import java.awt.event.MouseEvent
 import java.io.File
-import java.nio.file.Files
 import javax.swing.*
 import javax.swing.table.DefaultTableModel
 
 /**
- * 变更审查对话框
- * 左侧显示变更文件列表，右侧显示选中文件的 Diff
+ * 推送变更审查对话框
+ * 用于展示 IDEA → Qoder 的变更并支持推送
  */
-class ChangeReviewDialog(
+class PushReviewDialog(
     private val project: Project,
     private val changes: MutableList<FileChange>
 ) : DialogWrapper(project) {
@@ -43,8 +40,8 @@ class ChangeReviewDialog(
     
     data class FileChange(
         val relativePath: String,
-        val qoderFilePath: String,
         val ideaFilePath: String,
+        val qoderFilePath: String,
         val changeType: ChangeType,
         var accepted: Boolean = false
     )
@@ -54,7 +51,7 @@ class ChangeReviewDialog(
     }
     
     init {
-        title = "Qoder IDE 变更审查 - ${changes.size} 个文件"
+        title = "推送到 Qoder IDE - ${changes.size} 个文件"
         init()
     }
     
@@ -62,7 +59,7 @@ class ChangeReviewDialog(
         val mainPanel = JPanel(BorderLayout())
         mainPanel.preferredSize = Dimension(800, 600)
         
-        // 核心：直接添加文件列表面板，不再使用分割面板
+        // 核心：直接添加文件列表面板
         val listPanel = createFileListPanel()
         mainPanel.add(listPanel, BorderLayout.CENTER)
         
@@ -107,7 +104,7 @@ class ChangeReviewDialog(
         // 添加数据
         refreshTableData()
         
-        // 监听复选框变化 (核心修复: 实时同步状态)
+        // 监听复选框变化
         tableModel.addTableModelListener { e ->
             if (e.column == 0 && e.firstRow >= 0 && e.firstRow < changes.size) {
                 val value = tableModel.getValueAt(e.firstRow, 0) as? Boolean ?: false
@@ -121,7 +118,7 @@ class ChangeReviewDialog(
                 val row = table.rowAtPoint(e.point)
                 if (row >= 0) {
                     val modelRow = table.convertRowIndexToModel(row)
-                    // 如果双击的是复选框列，则不触发 Diff（让默认编辑器处理）
+                    // 如果双击的是复选框列，则不触发 Diff
                     if (table.columnAtPoint(e.point) == 0) return false
                     
                     val relativePath = tableModel.getValueAt(modelRow, 1) as? String ?: return false
@@ -149,7 +146,7 @@ class ChangeReviewDialog(
      * 更新统计标签
      */
     private fun updateStats() {
-        statsLabel.text = " 共 ${changes.size} 个待处理变更 "
+        statsLabel.text = " 共 ${changes.size} 个待推送变更 "
     }
 
     /**
@@ -180,25 +177,25 @@ class ChangeReviewDialog(
      */
     private fun showDiffAndInteractiveSync(change: FileChange) {
         try {
-            val qoderFile = File(change.qoderFilePath)
             val ideaFile = File(change.ideaFilePath)
+            val qoderFile = File(change.qoderFilePath)
             
-            // 如果 Qoder 文件不存在且不是删除类型，则无法对比
-            if (!qoderFile.exists() && change.changeType != ChangeType.DELETED) {
-                JOptionPane.showMessageDialog(contentPane, "找不到源文件: ${change.qoderFilePath}")
+            // 如果 IDEA 文件不存在且不是删除类型，则无法对比
+            if (!ideaFile.exists() && change.changeType != ChangeType.DELETED) {
+                JOptionPane.showMessageDialog(contentPane, "找不到源文件: ${change.ideaFilePath}")
                 return
             }
             
             val vfsLocal = LocalFileSystem.getInstance()
-            var vIdeaFile = vfsLocal.refreshAndFindFileByIoFile(ideaFile)
+            var vQoderFile = vfsLocal.refreshAndFindFileByPath(change.qoderFilePath)
             
             // 如果文件不存在（CREATED 类型），先创建一个空文件以便支持 Diff 编辑
-            if (vIdeaFile == null && change.changeType == ChangeType.CREATED) {
+            if (vQoderFile == null && change.changeType == ChangeType.CREATED) {
                 com.intellij.openapi.command.WriteCommandAction.runWriteCommandAction(project) {
                     try {
-                        ideaFile.parentFile?.mkdirs()
-                        ideaFile.createNewFile()
-                        vIdeaFile = vfsLocal.refreshAndFindFileByIoFile(ideaFile)
+                        qoderFile.parentFile?.mkdirs()
+                        qoderFile.createNewFile()
+                        vQoderFile = vfsLocal.refreshAndFindFileByIoFile(qoderFile)
                     } catch (e: Exception) {
                         e.printStackTrace()
                     }
@@ -206,29 +203,29 @@ class ChangeReviewDialog(
             }
             
             val diffContentFactory = DiffContentFactory.getInstance()
-            val fileType = vIdeaFile?.fileType ?: FileTypeManager.getInstance().getFileTypeByFileName(change.relativePath)
+            val fileType = vQoderFile?.fileType ?: FileTypeManager.getInstance().getFileTypeByFileName(change.relativePath)
             
-            // Qoder 端内容
-            val qoderDiffContent = if (qoderFile.exists()) {
-                val qoderContent = qoderFile.readText()
-                diffContentFactory.create(project, qoderContent, fileType)
+            // IDEA 端内容（左侧 - 来源）
+            val ideaDiffContent = if (ideaFile.exists()) {
+                val ideaContent = ideaFile.readText()
+                diffContentFactory.create(project, ideaContent, fileType)
             } else {
                 diffContentFactory.createEmpty()
             }
             
-            // IDEA 端内容
-            val ideaDiffContent = if (vIdeaFile != null) {
-                diffContentFactory.create(project, vIdeaFile!!)
+            // Qoder 端内容（右侧 - 目标，可编辑）
+            val qoderDiffContent = if (vQoderFile != null) {
+                diffContentFactory.create(project, vQoderFile!!)
             } else {
                 diffContentFactory.createEmpty()
             }
             
             val request = SimpleDiffRequest(
-                "同步审查: ${change.relativePath}",
-                ideaDiffContent,    // 左侧：IDEA (尽量可编辑)
-                qoderDiffContent,   // 右侧：Qoder (来源)
-                "IDEA 项目 (本地)",
-                "Qoder IDE (来源)"
+                "推送审查: ${change.relativePath}",
+                ideaDiffContent,    // 左侧：IDEA (来源)
+                qoderDiffContent,   // 右侧：Qoder (目标，可编辑)
+                "IDEA 项目 (来源)",
+                "Qoder IDE (目标)"
             )
             
             // 弹出 Diff 窗口
@@ -247,31 +244,31 @@ class ChangeReviewDialog(
      * 刷新单个文件的状态
      */
     private fun refreshFileStatus(change: FileChange) {
-        val qoderFile = File(change.qoderFilePath)
         val ideaFile = File(change.ideaFilePath)
+        val qoderFile = File(change.qoderFilePath)
         
-        if (qoderFile.exists() && ideaFile.exists()) {
+        if (ideaFile.exists() && qoderFile.exists()) {
             // 关键：强制刷新 VFS 并保存所有文档，确保磁盘上的文件是最新的
-            val vfsLocal = com.intellij.openapi.vfs.LocalFileSystem.getInstance()
-            val vIdeaFile = vfsLocal.refreshAndFindFileByIoFile(ideaFile)
-            if (vIdeaFile != null) {
+            val vfsLocal = LocalFileSystem.getInstance()
+            val vQoderFile = vfsLocal.refreshAndFindFileByIoFile(qoderFile)
+            if (vQoderFile != null) {
                 com.intellij.openapi.fileEditor.FileDocumentManager.getInstance().saveAllDocuments()
-                vIdeaFile.refresh(false, false)
+                vQoderFile.refresh(false, false)
             }
 
-            val qoderContent = qoderFile.readText().replace("\r\n", "\n").trim()
             val ideaContent = ideaFile.readText().replace("\r\n", "\n").trim()
+            val qoderContent = qoderFile.readText().replace("\r\n", "\n").trim()
             
-            if (qoderContent == ideaContent) {
+            if (ideaContent == qoderContent) {
                 // 完全一致，从列表中移除
                 val index = changes.indexOf(change)
                 if (index >= 0) {
                     changes.removeAt(index)
                     tableModel.removeRow(index)
-                    updateStats() // 修复: 更新统计文字
+                    updateStats()
                     
                     if (changes.isEmpty()) {
-                        JOptionPane.showMessageDialog(contentPane, "所有变更已同步完成！")
+                        JOptionPane.showMessageDialog(contentPane, "所有变更已推送完成！")
                         close(OK_EXIT_CODE)
                     }
                 }
@@ -293,53 +290,53 @@ class ChangeReviewDialog(
         val panel = JPanel(java.awt.FlowLayout(java.awt.FlowLayout.LEFT))
         panel.border = BorderFactory.createEmptyBorder(10, 10, 10, 10)
         
-        val syncAllBtn = JButton("一键接受所有变更")
-        syncAllBtn.addActionListener {
+        val pushAllBtn = JButton("一键推送所有变更")
+        pushAllBtn.addActionListener {
             val result = JOptionPane.showConfirmDialog(
                 contentPane,
-                "确定要将 Qoder 的所有变更覆盖到 IDEA 项目中吗？",
-                "确认全部同步",
+                "确定要将 IDEA 的所有变更推送到 Qoder IDE 项目中吗？",
+                "确认全部推送",
                 JOptionPane.YES_NO_OPTION
             )
             
             if (result == JOptionPane.YES_OPTION) {
-                // 执行全部同步逻辑
-                syncFiles(changes.toList())
+                // 执行全部推送逻辑
+                pushFiles(changes.toList())
             }
         }
         
-        val syncSelectedBtn = JButton("接受勾选的变更")
-        syncSelectedBtn.addActionListener {
+        val pushSelectedBtn = JButton("推送勾选的变更")
+        pushSelectedBtn.addActionListener {
             val selected = changes.filter { it.accepted }
             if (selected.isEmpty()) {
-                JOptionPane.showMessageDialog(contentPane, "请先勾选需要同步的文件")
+                JOptionPane.showMessageDialog(contentPane, "请先勾选需要推送的文件")
                 return@addActionListener
             }
-            syncFiles(selected)
+            pushFiles(selected)
         }
         
-        panel.add(syncSelectedBtn)
-        panel.add(syncAllBtn)
+        panel.add(pushSelectedBtn)
+        panel.add(pushAllBtn)
         
         return panel
     }
 
     /**
-     * 批量同步文件
+     * 批量推送文件
      */
-    private fun syncFiles(filesToSync: List<FileChange>) {
-        com.intellij.openapi.application.ApplicationManager.getApplication().runWriteAction {
-            filesToSync.forEach { change ->
+    private fun pushFiles(filesToPush: List<FileChange>) {
+        ApplicationManager.getApplication().runWriteAction {
+            filesToPush.forEach { change ->
                 try {
-                    val qoderFile = File(change.qoderFilePath)
                     val ideaFile = File(change.ideaFilePath)
+                    val qoderFile = File(change.qoderFilePath)
                     
-                    if (qoderFile.exists()) {
-                        ideaFile.parentFile?.mkdirs()
-                        qoderFile.copyTo(ideaFile, overwrite = true)
+                    if (ideaFile.exists()) {
+                        qoderFile.parentFile?.mkdirs()
+                        ideaFile.copyTo(qoderFile, overwrite = true)
                         
-                        val vfsLocal = com.intellij.openapi.vfs.LocalFileSystem.getInstance()
-                        val vFile = vfsLocal.refreshAndFindFileByIoFile(ideaFile)
+                        val vfsLocal = LocalFileSystem.getInstance()
+                        val vFile = vfsLocal.refreshAndFindFileByIoFile(qoderFile)
                         vFile?.refresh(false, false)
                     }
                 } catch (e: Exception) {
@@ -348,11 +345,11 @@ class ChangeReviewDialog(
             }
         }
         
-        // 同步完成后从列表中移除并刷新
-        val syncPaths = filesToSync.map { it.qoderFilePath }.toSet()
+        // 推送完成后从列表中移除并刷新
+        val pushPaths = filesToPush.map { it.ideaFilePath }.toSet()
         val iterator = changes.iterator()
         while (iterator.hasNext()) {
-            if (syncPaths.contains(iterator.next().qoderFilePath)) {
+            if (pushPaths.contains(iterator.next().ideaFilePath)) {
                 iterator.remove()
             }
         }
@@ -360,7 +357,7 @@ class ChangeReviewDialog(
         refreshTableData()
         
         if (changes.isEmpty()) {
-            JOptionPane.showMessageDialog(contentPane, "所有变更已同步完成！")
+            JOptionPane.showMessageDialog(contentPane, "所有变更已推送完成！")
             close(OK_EXIT_CODE)
         }
     }

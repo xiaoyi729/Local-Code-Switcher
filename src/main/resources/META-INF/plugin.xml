@@ -9,8 +9,8 @@
 
     <h4>Main Features / 主要功能：</h4>
     <ul>
-        <li>🔄 Cross-directory scanning: Compare differences between Qoder and IDEA projects<br/>
-            跨目录扫描：对比 Qoder 和 IDEA 项目之间的差异</li>
+        <li>🔄 Bidirectional sync: Sync changes from Qoder to IDEA or from IDEA to Qoder<br/>
+            双向同步：支持从 Qoder 同步到 IDEA，也支持从 IDEA 推送到 Qoder</li>
         <li>📝 Interactive sync: Double-click a file to merge parts or all changes<br/>
             交互式同步：双击文件即可部分或全部合并变更</li>
         <li>🔍 Smart Diff: Integrated with IDEA's built-in diff tool<br/>
@@ -26,7 +26,8 @@
             配置：文件 → 设置 → 工具 → Local Code Switcher</li>
         <li>Set Qoder IDE path and project directory / 设置 Qoder IDE 路径和项目目录</li>
         <li>Right-click file → "在 Qoder 中打开" / Right-click → "Open in Qoder"</li>
-        <li>Use Ctrl+Alt+S to sync changes / 使用 Ctrl+Alt+S 同步变更</li>
+        <li>Use Ctrl+Alt+S to sync from Qoder / 使用 Ctrl+Alt+S 从 Qoder 同步</li>
+        <li>Use Ctrl+Alt+P to push to Qoder / 使用 Ctrl+Alt+P 推送到 Qoder</li>
     </ol>
     ]]></description>
 
@@ -92,6 +93,14 @@
                     description="手动扫描 Qoder 目录并审查变更"
                     icon="AllIcons.Actions.Refresh">
                 <keyboard-shortcut keymap="$default" first-keystroke="control alt S"/>
+            </action>
+            
+            <action id="com.zxy.plugin.qoder.actions.PushToQoderAction"
+                    class="com.zxy.plugin.qoder.actions.PushToQoderAction"
+                    text="推送到 Qoder IDE"
+                    description="将 IDEA 的变更推送到 Qoder IDE 项目"
+                    icon="AllIcons.Actions.Upload">
+                <keyboard-shortcut keymap="$default" first-keystroke="control alt P"/>
             </action>
 
             <separator/>
