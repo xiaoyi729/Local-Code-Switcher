@@ -4,14 +4,14 @@
 
 ## 功能特性
 
-### 🔄 IDE 灵活切换
-- 一键从 IDEA 切换到 Qoder IDE。
+### 🔄 双向 IDE 切换
+- 一键从 IDEA 切换到 Qoder IDE，支持反向推送。
 - 支持单文件、目录、或整个项目的跨 IDE 打开。
 - 智能识别操作系统，支持 Windows、macOS 和 Linux。
 
-### 📝 交互式手动同步 (核心)
+### 📝 双向交互式手动同步 (核心)
 - **非侵入式设计**：取消后台实时监控，改为由开发者手动触发同步，避免频繁干扰。
-- **跨目录扫描**：支持两个不同本地路径下的同一 Git 项目克隆之间的内容比对。
+- **双向跨目录扫描**：支持两个不同本地路径下的同一 Git 项目克隆之间的内容比对和推送。
 - **变更审查窗口**：独立的 UI 窗口展示所有差异文件列表。
 - **双击即达**：在列表中双击文件，直接进入交互式 Diff 视图。
 
@@ -38,7 +38,7 @@ cd local-code-switcher
    - 打开 IDEA
    - 进入 `File → Settings → Plugins`
    - 点击齿轮图标 → `Install Plugin from Disk...`
-   - 选择 `build/distributions/local-code-switcher-1.0.0.zip`
+   - 选择 `build/distributions/local-code-switcher-1.0.1.zip`
 
 ### 方式二：从源码运行（开发模式）
 
@@ -77,6 +77,7 @@ cd local-code-switcher
 
 ### 3. 代码同步流程 (核心工作流)
 
+#### 方向 1: Qoder → IDEA
 1. **在 IDEA 中触发打开**
    - 使用右键菜单 `Open in Qoder IDE`。
    - IDEA 会启动 Qoder 并定位到对应文件。
@@ -93,6 +94,19 @@ cd local-code-switcher
    - 在弹出的窗口中，双击感兴趣的文件。
    - 在 Diff 视图中使用 `>>` 合并代码。
    - 关闭 Diff 视图，已同步的文件会自动从列表中移除。
+
+#### 方向 2: IDEA → Qoder
+1. **在 IDEA 中完成编码**
+   - 在 IDEA 中编写或修改代码并保存。
+
+2. **推送至 Qoder IDE**
+   - 快捷键：`Ctrl + Alt + P` 或 菜单 `Tools → Qoder IDE 同步 → 推送到 Qoder IDE`。
+   - 插件将后台扫描 IDEA 目录与 Qoder 目录的差异。
+
+3. **交互式审查与推送**
+   - 在弹出的窗口中，双击感兴趣的文件。
+   - 在 Diff 视图中进行修改（右侧为 Qoder 可编辑）。
+   - 关闭 Diff 视图，已推送的文件会自动从列表中移除。
 
 ## 配置选项
 
@@ -189,6 +203,12 @@ local-code-switcher/
 2. 确认文件确实有变更
 
 ## 更新日志
+
+### Version 1.0.1 (2026-01-31)
+- ✨ 新增双向同步支持：从 IDEA 推送到 Qoder IDE
+- ✨ 新增快捷键：Ctrl+Alt+P 用于推送变更
+- ✨ 新增 PushReviewDialog：用于 IDEA → Qoder 的变更审查
+- ✨ 增强用户体验：支持反向推送功能
 
 ### Version 1.0.0 (2026-01-27)
 - ✨ 统一 UI 名称为 "Local Code Switcher"

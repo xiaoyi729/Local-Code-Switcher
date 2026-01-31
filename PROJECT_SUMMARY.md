@@ -6,7 +6,7 @@
 
 ### 项目信息
 - **项目名称**: Local Code Switcher
-- **版本**: 1.0.0
+- **版本**: 1.0.1
 - **语言**: Kotlin
 - **构建工具**: Gradle + IntelliJ Plugin
 - **目标平台**: IntelliJ IDEA 2023.2+

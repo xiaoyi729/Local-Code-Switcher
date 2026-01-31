@@ -31,11 +31,12 @@
     </ol>
     ]]></description>
 
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <change-notes><![CDATA[
       <ul>
-        <li>Unified UI name to "Local Code Switcher" / 统一 UI 名称为 "Local Code Switcher"</li>
-        <li>Improved English and Chinese documentation / 完善中英双语说明文档</li>
+        <li>Bidirectional sync support: Added "Push to Qoder IDE" functionality / 支持双向同步：新增 "推送到 Qoder IDE" 功能</li>
+        <li>New keyboard shortcut: Ctrl+Alt+P for pushing changes to Qoder / 新增快捷键：Ctrl+Alt+P 用于推送到 Qoder</li>
+        <li>Enhanced user experience with interactive review dialogs / 通过交互式审查对话框提升用户体验</li>
       </ul>
     ]]></change-notes>
 

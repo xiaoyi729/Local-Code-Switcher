@@ -24,7 +24,7 @@ gradlew.bat buildPlugin
 ./gradlew buildPlugin
 ```
 
-构建完成后，插件文件位于：`build/distributions/local-code-switcher-1.0.0.zip`
+构建完成后，插件文件位于：`build/distributions/local-code-switcher-1.0.1.zip`
 
 ### 3. 安装到 IDEA
 
@@ -32,7 +32,7 @@ gradlew.bat buildPlugin
 2. 进入 `File → Settings → Plugins` (Windows/Linux) 或 `IntelliJ IDEA → Preferences → Plugins` (macOS)
 3. 点击齿轮图标 ⚙️
 4. 选择 `Install Plugin from Disk...`
-5. 选择 `build/distributions/local-code-switcher-1.0.0.zip`
+5. 选择 `build/distributions/local-code-switcher-1.0.1.zip`
 6. 重启 IDEA
 
 ### 4. 配置插件
@@ -60,6 +60,7 @@ gradlew.bat buildPlugin
 
 ## 工作流程
 
+### 方向 1: Qoder → IDEA
 ```
 ┌──────────────────────────────────────────────────────────┐
 │  1. 在 IDEA 中发起跳转 (Right Click -> Open in Qoder)   │
@@ -74,11 +75,25 @@ gradlew.bat buildPlugin
 └──────────────────────────────────────────────────────────┘
 ```
 
+### 方向 2: IDEA → Qoder
+```
+┌──────────────────────────────────────────────────────────┐
+│  1. 在 IDEA 中编码并保存文件                             │
+│     ↓                                                    │
+│  2. 在 IDEA 中触发推送 (Ctrl + Alt + P)                │
+│     ↓                                                    │
+│  3. 交互式 Diff 审查并推送变更 (Double Click & Edit)     │
+│     ↓                                                    │
+│  4. 列表自动刷新，推送完成                               │
+└──────────────────────────────────────────────────────────┘
+```
+
 ## 核心功能
 
 ### ✅ 已实现的功能
 
 - [x] IDE 切换 (IDEA → Qoder IDE)
+- [x] 双向同步 (IDEA ↔ Qoder IDE)
 - [x] 跨目录手动扫描
 - [x] 交互式审查窗口
 - [x] 双击直达交互式 Diff
@@ -89,7 +104,6 @@ gradlew.bat buildPlugin
 
 ### 🚀 可扩展功能
 
-- [ ] 双向切换 (Qoder IDE → IDEA)
 - [ ] 冲突解决机制
 - [ ] 变更历史记录
 - [ ] 批量文件处理
