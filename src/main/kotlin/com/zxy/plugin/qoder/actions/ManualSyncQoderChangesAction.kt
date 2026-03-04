@@ -19,7 +19,7 @@ class ManualSyncQoderChangesAction : AnAction("同步 Qoder 变更") {
     override fun actionPerformed(e: AnActionEvent) {
         val project = e.project ?: return
         
-        val settings = QoderSettingsState.getInstance()
+        val settings = QoderSettingsState.getInstance(project)
         if (settings.qoderProjectPath.isEmpty()) {
             Messages.showWarningDialog(
                 project,

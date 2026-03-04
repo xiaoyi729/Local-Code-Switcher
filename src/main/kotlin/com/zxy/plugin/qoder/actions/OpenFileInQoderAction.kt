@@ -17,7 +17,7 @@ class OpenFileInQoderAction : AnAction() {
     override fun actionPerformed(e: AnActionEvent) {
         val project = e.project ?: return
         val virtualFile = e.getData(CommonDataKeys.VIRTUAL_FILE) ?: return
-        val settings = QoderSettingsState.getInstance()
+        val settings = QoderSettingsState.getInstance(project)
         
         // 检查 Qoder IDE 路径是否配置
         if (settings.qoderIdePath.isEmpty()) {

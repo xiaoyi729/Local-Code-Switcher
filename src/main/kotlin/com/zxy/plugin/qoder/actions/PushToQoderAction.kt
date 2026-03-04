@@ -18,7 +18,7 @@ class PushToQoderAction : AnAction("推送到 Qoder IDE") {
     override fun actionPerformed(e: AnActionEvent) {
         val project = e.project ?: return
         
-        val settings = QoderSettingsState.getInstance()
+        val settings = QoderSettingsState.getInstance(project)
         if (settings.qoderProjectPath.isEmpty()) {
             Messages.showWarningDialog(
                 project,

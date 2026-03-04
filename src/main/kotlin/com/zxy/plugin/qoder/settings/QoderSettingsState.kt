@@ -10,8 +10,8 @@ import com.intellij.util.xmlb.XmlSerializerUtil
     name = "com.zxy.plugin.qoder.settings.QoderSettingsState",
     storages = [Storage("QoderSwitcherSettings.xml")]
 )
-@Service
-class QoderSettingsState : PersistentStateComponent<QoderSettingsState> {
+@Service(Service.Level.PROJECT)
+class QoderSettingsState(private val project: com.intellij.openapi.project.Project) : PersistentStateComponent<QoderSettingsState> {
     
     /** Qoder IDE 可执行文件路径 */
     var qoderIdePath: String = ""
@@ -31,8 +31,8 @@ class QoderSettingsState : PersistentStateComponent<QoderSettingsState> {
     }
     
     companion object {
-        fun getInstance(): QoderSettingsState {
-            return service()
+        fun getInstance(project: com.intellij.openapi.project.Project): QoderSettingsState {
+            return project.service()
         }
     }
 }

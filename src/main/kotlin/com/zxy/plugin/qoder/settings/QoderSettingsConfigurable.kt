@@ -2,6 +2,9 @@ package com.zxy.plugin.qoder.settings
 
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory
 import com.intellij.openapi.options.Configurable
+import com.intellij.openapi.options.ConfigurationException
+import com.intellij.openapi.project.Project
+import com.intellij.openapi.roots.ProjectRootManager
 import com.intellij.openapi.ui.TextFieldWithBrowseButton
 import com.intellij.ui.components.JBCheckBox
 import com.intellij.ui.components.JBLabel
@@ -14,7 +17,7 @@ import javax.swing.JPanel
 /**
  * 插件设置界面配置
  */
-class QoderSettingsConfigurable : Configurable {
+class QoderSettingsConfigurable(private val project: Project) : Configurable {
     
     private var mainPanel: JPanel? = null
     private val qoderPathField = TextFieldWithBrowseButton()
@@ -24,7 +27,7 @@ class QoderSettingsConfigurable : Configurable {
     override fun getDisplayName(): String = "Local Code Switcher"
     
     override fun createComponent(): JComponent {
-        val settings = QoderSettingsState.getInstance()
+        val settings = QoderSettingsState.getInstance(project)
         
         // 配置 Qoder IDE 可执行文件选择器
         qoderPathField.addBrowseFolderListener(
@@ -63,21 +66,21 @@ class QoderSettingsConfigurable : Configurable {
     }
     
     override fun isModified(): Boolean {
-        val settings = QoderSettingsState.getInstance()
+        val settings = QoderSettingsState.getInstance(project)
         return qoderPathField.text != settings.qoderIdePath ||
                 qoderProjectPathField.text != settings.qoderProjectPath ||
                 keepWindowCheckBox.isSelected != settings.keepIdeaWindowOpen
     }
     
     override fun apply() {
-        val settings = QoderSettingsState.getInstance()
+        val settings = QoderSettingsState.getInstance(project)
         settings.qoderIdePath = qoderPathField.text
         settings.qoderProjectPath = qoderProjectPathField.text
         settings.keepIdeaWindowOpen = keepWindowCheckBox.isSelected
     }
     
     override fun reset() {
-        val settings = QoderSettingsState.getInstance()
+        val settings = QoderSettingsState.getInstance(project)
         qoderPathField.text = settings.qoderIdePath
         qoderProjectPathField.text = settings.qoderProjectPath
         keepWindowCheckBox.isSelected = settings.keepIdeaWindowOpen

@@ -54,7 +54,7 @@ class QoderDirectorySyncService(private val project: Project) {
      * 手动扫描 Qoder 项目目录，查找所有变更的文件
      */
     fun scanChanges(): List<com.zxy.plugin.qoder.ui.ChangeReviewDialog.FileChange> {
-        val settings = QoderSettingsState.getInstance()
+        val settings = QoderSettingsState.getInstance(project)
         
         if (settings.qoderProjectPath.isEmpty()) {
             return emptyList()
@@ -174,7 +174,7 @@ class QoderDirectorySyncService(private val project: Project) {
      * 反向扫描：从 IDEA 项目扫描变更，用于推送到 Qoder IDE
      */
     fun scanChangesFromIdea(): List<com.zxy.plugin.qoder.ui.PushReviewDialog.FileChange> {
-        val settings = QoderSettingsState.getInstance()
+        val settings = QoderSettingsState.getInstance(project)
         
         if (settings.qoderProjectPath.isEmpty()) {
             return emptyList()

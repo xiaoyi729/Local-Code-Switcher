@@ -43,15 +43,15 @@
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <!-- 设置配置界面 -->
-        <applicationConfigurable
+        <!-- 项目级设置配置界面 -->
+        <projectConfigurable
             parentId="tools"
             instance="com.zxy.plugin.qoder.settings.QoderSettingsConfigurable"
             id="com.zxy.plugin.qoder.settings.QoderSettingsConfigurable"
             displayName="Local Code Switcher"/>
 
         <!-- 服务注册 -->
-        <applicationService serviceImplementation="com.zxy.plugin.qoder.services.QoderSettingsState"/>
+        <projectService serviceImplementation="com.zxy.plugin.qoder.settings.QoderSettingsState"/>
         <projectService serviceImplementation="com.zxy.plugin.qoder.services.QoderProjectService"/>
         <projectService serviceImplementation="com.zxy.plugin.qoder.services.QoderDirectorySyncService"/>
     </extensions>

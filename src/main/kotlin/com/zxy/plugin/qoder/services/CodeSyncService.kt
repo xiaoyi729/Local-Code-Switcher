@@ -41,7 +41,7 @@ class CodeSyncService {
      * 处理文件变更事件
      */
     private fun handleFileChange(project: Project, event: VFileContentChangeEvent) {
-        val settings = QoderSettingsState.getInstance()
+        val settings = QoderSettingsState.getInstance(project)
         val file = event.file
         
         // 检查文件是否在监控列表中
